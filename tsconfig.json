@@ -3,6 +3,10 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
-    "experimentalDecorators": true
-  }
+    "experimentalDecorators": true,
+    "outDir": "dist"
+  },
+  "files": [
+    "index.ts"
+  ]
 }

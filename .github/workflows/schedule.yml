@@ -1,0 +1,16 @@
+name: Update gist with WakaTime stats
+on:
+  schedule:
+    - cron: "0 0 * * *"
+jobs:
+  update-gist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Update gist
+        uses: Yukaii/wakatime-metrics-ts@master
+        env:
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+          GIST_ID: ${{ secrets.GIST_ID }}
+          WAKATIME_LANGUAGE: ${{ secrets.WAKATIME_LANGUAGE }}
+          WAKATIME_ACTIVITY: ${{ secrets.WAKATIME_ACTIVITY }}
