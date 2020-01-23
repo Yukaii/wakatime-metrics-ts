@@ -6,22 +6,6 @@ if (process.env.NODE_ENV === 'development') {
   require('dotenv').config()
 }
 
-const padLeft = (str: string, len: number, ch = ' ') => {
-  if (str.length > len) {
-    throw new Error('len should be less than str.length')
-  }
-
-  return `${str}${Array(len - str.length).fill(ch).join('')}`
-}
-
-const padRight = (str: string, len: number, ch = ' ') => {
-  if (str.length > len) {
-    throw new Error('len should be less than str.length')
-  }
-
-  return `${Array(len - str.length).fill(ch).join('')}${str}`
-}
-
 type WakaTimeLanguage = {
   data: Array<{
     name: string,
@@ -75,12 +59,12 @@ const generateMetrics = async () => {
     })
 
     return [
-      padLeft(lang.name, maxNameLength + 2),
-      padRight(time, maxTimeLength),
+      lang.name.padEnd(maxNameLength + 2),
+      time.padStart(maxTimeLength),
       '  ',
-      padLeft(blocks, 25, '░'),
+      blocks.padEnd(25, '░'),
       ' ',
-      padRight(`${lang.percent}`, 5),
+      `${lang.percent}`.padStart(5),
       '%',
     ].join('')
   }).join('\n')
