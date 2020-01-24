@@ -12,14 +12,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/axios": "^0.14.0",
     "@types/node": "^13.1.8",
+    "@types/superagent": "^4.1.4",
     "dotenv": "^8.2.0",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "humanize-duration": "^3.21.0"
+    "humanize-duration": "^3.21.0",
+    "superagent": "^5.2.1"
   }
 }

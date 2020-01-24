@@ -1,4 +1,4 @@
-import axios from 'axios'
+import * as superagent from 'superagent'
 import * as humanizeDuration from 'humanize-duration'
 
 if (process.env.NODE_ENV === 'development') {
@@ -32,8 +32,8 @@ type WakaTimeActivity = {
 }
 
 const generateMetrics = async () => {
-  const { data: langMetrics }: { data: WakaTimeLanguage } = await axios.get(process.env.WAKATIME_LANGUAGE)
-  const { data: activity }: { data: WakaTimeActivity } = await axios.get(process.env.WAKATIME_ACTIVITY)
+  const { body: langMetrics } : { body: WakaTimeLanguage } = await superagent.get(process.env.WAKATIME_LANGUAGE)
+  const { body: activity }: { body: WakaTimeActivity } = await superagent.get(process.env.WAKATIME_ACTIVITY)
 
   const { data } = langMetrics
 
@@ -72,18 +72,17 @@ const generateMetrics = async () => {
 ;(async () => {
   const metrics = await generateMetrics()
 
-  await axios.patch(`https://api.github.com/gists/${process.env.GIST_ID}`, {
-    files: {
-      "📊 Weekly development breakdown": {
-        content: metrics
+  await superagent
+    .patch(`https://api.github.com/gists/${process.env.GIST_ID}`)
+    .set('Authorization', `token ${process.env.GIST_TOKEN}`)
+    .set('User-Agent', 'wakatime-metrics-ts')
+    .send({
+      files: {
+        "📊 Weekly development breakdown": {
+          content: metrics
+        }
       }
-    }
-  }, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `token ${process.env.GIST_TOKEN}`
-    }
-  })
+    })
 
   process.exit(0)
 })()
