@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var axios_1 = require("axios");
+var superagent = require("superagent");
 var humanizeDuration = require("humanize-duration");
 if (process.env.NODE_ENV === 'development') {
     require('dotenv').config();
@@ -45,12 +45,12 @@ var generateMetrics = function () { return __awaiter(void 0, void 0, void 0, fun
     var langMetrics, activity, data, top5Langs, maxNameLength, totalSeconds, times, maxTimeLength;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, axios_1["default"].get(process.env.WAKATIME_LANGUAGE)];
+            case 0: return [4 /*yield*/, superagent.get(process.env.WAKATIME_LANGUAGE)];
             case 1:
-                langMetrics = (_a.sent()).data;
-                return [4 /*yield*/, axios_1["default"].get(process.env.WAKATIME_ACTIVITY)];
+                langMetrics = (_a.sent()).body;
+                return [4 /*yield*/, superagent.get(process.env.WAKATIME_ACTIVITY)];
             case 2:
-                activity = (_a.sent()).data;
+                activity = (_a.sent()).body;
                 data = langMetrics.data;
                 top5Langs = data.slice(0, 5);
                 maxNameLength = Math.max.apply(Math, top5Langs.map(function (lang) { return lang.name.length; }));
@@ -88,16 +88,15 @@ var generateMetrics = function () { return __awaiter(void 0, void 0, void 0, fun
             case 0: return [4 /*yield*/, generateMetrics()];
             case 1:
                 metrics = _a.sent();
-                return [4 /*yield*/, axios_1["default"].patch("https://api.github.com/gists/" + process.env.GIST_ID, {
+                return [4 /*yield*/, superagent
+                        .patch("https://api.github.com/gists/" + process.env.GIST_ID)
+                        .set('Authorization', "token " + process.env.GIST_TOKEN)
+                        .set('User-Agent', 'wakatime-metrics-ts')
+                        .send({
                         files: {
                             "📊 Weekly development breakdown": {
                                 content: metrics
                             }
-                        }
-                    }, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': "token " + process.env.GIST_TOKEN
                         }
                     })];
             case 2:

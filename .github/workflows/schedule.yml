@@ -7,8 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - run: npm install
       - name: Update gist
-        uses: Yukaii/wakatime-metrics-ts@master
         env:
           GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
           GIST_ID: ${{ secrets.GIST_ID }}
